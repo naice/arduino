@@ -1,5 +1,5 @@
 {
-    "sketch": "Bewegungsmelder.ino",
+    "sketch": "led_test.ino",
     "programmer": "AVRISP mkII",
     "board": "arduino:avr:nano",
     "configuration": "cpu=atmega328old",

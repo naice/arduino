@@ -1,5 +1,5 @@
 //
-//  Bewegungsmelder Flur / 60 Leds
+//  Bewegungsmelder Küche / 60 Leds
 //
 
 #define FASTLED_ALLOW_INTERRUPTS 0
@@ -7,8 +7,8 @@
 FASTLED_USING_NAMESPACE
 
 #define LED_PIN             6
-#define NUM_LEDS            60
-#define MAX_POWER_MILLIAMPS 2500
+#define NUM_LEDS            300
+#define MAX_POWER_MILLIAMPS 18000
 #define LED_TYPE            WS2812B
 #define COLOR_ORDER         GRB
 
