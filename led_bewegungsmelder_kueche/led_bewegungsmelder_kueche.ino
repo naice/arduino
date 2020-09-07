@@ -1,23 +1,31 @@
 //
-//  Bewegungsmelder Flur / 60 Leds
+//  Bewegungsmelder Küche / 60 Leds
 //
+
+#include <avr/sleep.h>
 
 #define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
 FASTLED_USING_NAMESPACE
 
 #define LED_PIN             6
-#define NUM_LEDS            60
-#define MAX_POWER_MILLIAMPS 2500
+#define NUM_LEDS            300
+#define MAX_POWER_MILLIAMPS 20000
 #define LED_TYPE            WS2812B
 #define COLOR_ORDER         GRB
 
 #define PIR_PIN             3
 
+#define ANIMATION_DURATION  60000
+#define LIFECYCLE_DURATION  120000
+
 //////////////////////////////////////////////////////////////////////////
 
 CRGB leds[NUM_LEDS];
 unsigned long motionDetectedMillis = 0;
+bool isInterruptByMotion = false;
+
+//////////////////////////////////////////////////////////////////////////
 
 void setup() {
   pinMode(PIR_PIN, INPUT);
@@ -25,19 +33,23 @@ void setup() {
   FastLED.addLeds<LED_TYPE,LED_PIN,COLOR_ORDER>(leds, NUM_LEDS)
         .setCorrection(TypicalLEDStrip);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_POWER_MILLIAMPS);
+
+  // set PIR_PIN to interrupt. 
+  attachInterrupt(digitalPinToInterrupt(PIR_PIN), interrupt_motion_detected, HIGH);
 }
 
 void loop()
 {
   // detect motion and start pacifica animation or fade to black.
-  if(detect_motion())
+  if (isInterruptByMotion)
   {
+    isInterruptByMotion = false;
     motionDetectedMillis = millis();
   }
   
   // millis will overflow at approx. 49.7 days => rely on duration only.
   unsigned long elapsedMillisSinceMotionDetected = millis() - motionDetectedMillis;
-  if (elapsedMillisSinceMotionDetected < 60000 ) {
+  if (elapsedMillisSinceMotionDetected < ANIMATION_DURATION) {
     EVERY_N_MILLISECONDS(20) {
       pacifica_loop();
       FastLED.show();
@@ -48,14 +60,31 @@ void loop()
       FastLED.show();
     }
   }
+
+  // test for end of lifecycle reached and send to sleep. 
+  if (elapsedMillisSinceMotionDetected > LIFECYCLE_DURATION) {
+    go_to_sleep();
+  }
 }
+
 //////////////////////////////////////////////////////////////////////////
 // 
-// Motion detection from PIR Sensor
+// Motion detection from PIR Sensor has triggert interrupt.
 // 
 //////////////////////////////////////////////////////////////////////////
-bool detect_motion() {
-  return digitalRead(PIR_PIN) == HIGH;
+void interrupt_motion_detected() {
+  isInterruptByMotion = true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
+// Send the Nano to sleep.
+// 
+//////////////////////////////////////////////////////////////////////////
+void go_to_sleep() {
+  sleep_enable();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_cpu();
 }
 
 //////////////////////////////////////////////////////////////////////////

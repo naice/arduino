@@ -1,0 +1,7 @@
+{
+    "sketch": "led_bewegungsmelder_kueche.ino",
+    "programmer": "AVRISP mkII",
+    "board": "arduino:avr:nano",
+    "configuration": "cpu=atmega328old",
+    "port": "COM5"
+}
