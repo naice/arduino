@@ -1,0 +1,7 @@
+{
+    "sketch": "UltraschallRelais.ino",
+    "board": "arduino:avr:nano",
+    "configuration": "cpu=atmega328old",
+    "port": "COM8",
+    "programmer": "AVRISP mkII"
+}

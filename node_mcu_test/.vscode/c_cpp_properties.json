@@ -1,0 +1,46 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "includePath": [
+                "${workspaceFolder}\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                "C:\\Projects\\arduino\\libraries\\**"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}\\**",
+                    "C:\\Program Files (x86)\\Arduino\\hardware\\**",
+                    "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                    "C:\\Projects\\arduino\\libraries\\**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "msvc-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\imnai\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:\\Users\\imnai\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\**",
+                "C:\\Program Files (x86)\\Arduino\\tools\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**"
+            ],
+            "forcedInclude": [],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}\\**",
+                    "C:\\Program Files (x86)\\Arduino\\hardware\\**",
+                    "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                    "C:\\Projects\\arduino\\libraries\\**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}

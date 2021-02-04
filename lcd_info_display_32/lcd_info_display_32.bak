@@ -1,0 +1,83 @@
+#include <SPI.h>
+#include <MiniGrafx.h>
+#include <ILI9341_SPI.h>
+#include <XPT2046_Touchscreen.h>
+#include <WiFi.h>
+
+#include "arial_rounded.h"
+
+#define TFT_CS    05
+#define TFT_RST   22
+#define TFT_DC    21
+#define TOUCH_CS  04
+
+// defines the colors usable in the paletted 16 color frame buffer
+uint16_t palette[] = {
+  ILI9341_BLACK,      // 0
+  ILI9341_WHITE,      // 1
+  ILI9341_YELLOW,     // 2
+  ILI9341_DARKCYAN,   // 3
+  ILI9341_DARKGREEN,  // 4
+  ILI9341_MAROON,     // 5
+  ILI9341_PURPLE,     // 6
+  ILI9341_OLIVE,      // 7
+  ILI9341_LIGHTGREY,  // 8
+  ILI9341_DARKGREY,   // 9
+  ILI9341_BLUE,       // 10
+  ILI9341_GREEN,      // 11
+  ILI9341_CYAN,       // 12
+  ILI9341_RED,        // 13
+  ILI9341_MAGENTA,    // 14
+  ILI9341_NAVY};      // 15
+int SCREEN_WIDTH = 240;
+int SCREEN_HEIGHT = 320;
+int BITS_PER_PIXEL = 4; // 2^2 =  4 colors
+
+ILI9341_SPI tft = ILI9341_SPI(TFT_CS, TFT_DC, TFT_RST);
+MiniGrafx gfx = MiniGrafx(&tft, BITS_PER_PIXEL, palette);
+XPT2046_Touchscreen ts = XPT2046_Touchscreen(TOUCH_CS);
+
+void setup()
+{
+    Serial.begin(115200);
+
+    ts.begin();
+
+    gfx.init();
+    gfx.fillBuffer(ILI9341_BLACK);
+    gfx.commit();
+    
+}
+
+void loop()
+{
+    TS_Point touchPoint(0,0,0);
+    digitalWrite(TFT_CS, HIGH);
+    digitalWrite(TOUCH_CS, LOW);
+    if (ts.touched()) {
+        touchPoint = ts.getPoint();
+    }    
+    digitalWrite(TOUCH_CS, HIGH);
+    digitalWrite(TFT_CS, LOW);
+
+    drawDialog(
+        String("X: ") + String(touchPoint.x) + String("\n") +
+        String("Y: ") + String(touchPoint.y) + String("\n") +
+        String("Z: ") + String(touchPoint.z) 
+    );
+    delay(200);
+}
+
+
+void drawDialog(String text) {
+Serial.println(text);
+
+  gfx.fillBuffer(ILI9341_BLACK);
+  gfx.setTransparentColor(ILI9341_BLACK);
+  gfx.setTextAlignment(TEXT_ALIGN_CENTER);
+  gfx.setColor(ILI9341_LIGHTGREY);
+  gfx.setFont(ArialRoundedMTBold_14);
+
+  gfx.drawString(120, 30, text);
+  gfx.commit();
+}

@@ -1,0 +1,7 @@
+{
+    "sketch": "spiegelschrank_bad.ino",
+    "board": "arduino:avr:nano",
+    "configuration": "cpu=atmega328old",
+    "port": "COM10",
+    "programmer": "AVRISP mkII"
+}
